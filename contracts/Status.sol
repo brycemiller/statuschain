@@ -27,6 +27,10 @@ contract Status {
         maxLimit = 100;
     }
 
+    function getCount() public view returns(uint) {
+        return count;
+    }
+
     function addUpdate(
         Severity severity,
         string calldata heading,
@@ -34,8 +38,8 @@ contract Status {
     )
         public
     {
-        count++;
         updates[count] = Update(count, severity, heading, message);
+        count++;
     }
 
     function getUpdate(uint id)
