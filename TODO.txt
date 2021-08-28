@@ -1,5 +1,0 @@
-1   Solidity contract that saves a message and status to the blockchain
-2   React APP that displays the messages and status from the blockchain
-3   React APP that allows user to publish new message and status
-4   Restrict who can publish to just the current owner
-5   Allow the current owner to change the owner to a new owner
