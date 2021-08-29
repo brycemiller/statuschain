@@ -44,7 +44,17 @@ contract TestStatus {
     function testGetUpdates() public {
         Status status = new Status();
 
-        for (uint i = 0; i < 20; i++) {
+        Status.Update[] memory updates;
+        Status.Update memory update;
+        uint initialAmount = 20;
+        uint initialCursor = 0;
+        uint count;
+        uint expectedAmount;
+        uint expectedCursor;
+        uint fetchAmount;
+        uint nextCursor;
+
+        for (uint i = 0; i < initialAmount; i++) {
             status.addUpdate(
                 Status.Severity(i % 5),
                 string(abi.encodePacked("Update ", i)),
@@ -52,20 +62,138 @@ contract TestStatus {
             );
         }
 
-        uint count = status.getCount();
-        Assert.equal(count, 20, "Count after addUpdate should be 20");
+        count = status.getCount();
 
-        Status.Update[] memory updates;
-        uint nextCursor;
-        (updates, nextCursor) = status.getUpdates(0, 10);
+        Assert.equal(
+            count,
+            initialAmount,
+            string(abi.encodePacked("Count after addUpdate should be ", initialAmount))
+        );
 
-        Status.Update memory update;
-        for (uint i = 0; i < 10; i++) {
+        // Test basic functionality - getUpdates
+        fetchAmount = 10;
+        expectedAmount = 10;
+        expectedCursor = 10;
+        (updates, nextCursor) = status.getUpdates(initialCursor, fetchAmount);
+
+        Assert.equal(
+            updates.length,
+            expectedAmount,
+            string(abi.encodePacked("Length of updates should be ", expectedAmount))
+        );
+        Assert.equal(updates[0].id, 0, "Id of first update should be 0");
+        Assert.equal(updates[updates.length-1].id, 9, "Id of last update should be 9");
+
+        for (uint i = 0; i < expectedAmount; i++) {
             update = updates[i];
             Assert.equal(update.id, i, "Id is not correct");
-            Assert.equal(uint(update.impact), uint(i % 5), "Impact is not correct");
-            Assert.equal(update.heading, string(abi.encodePacked("Update ", i)), "Heading is not correct");
+            Assert.equal(
+                uint(update.impact),
+                uint(i % 5),
+                "Impact is not correct"
+            );
+            Assert.equal(
+                update.heading,
+                string(abi.encodePacked("Update ", i)),
+                "Heading is not correct"
+            );
         }
-        Assert.equal(nextCursor, 10, "Next cursor should be 10");
+
+        Assert.equal(
+            nextCursor,
+            expectedCursor,
+            string(abi.encodePacked("Next cursor should be ", expectedCursor))
+        );
+
+        // Test fetching next amount - getUpdates
+        fetchAmount = 5;
+        expectedAmount = 5;
+        expectedCursor = 15;
+        (updates, nextCursor) = status.getUpdates(nextCursor, fetchAmount);
+
+        Assert.equal(
+            updates.length,
+            expectedAmount,
+            string(abi.encodePacked("Length of updates should be ", expectedAmount))
+        );
+        Assert.equal(updates[0].id, 10, "Id of first update should be 10");
+        Assert.equal(updates[updates.length-1].id, 14, "Id of last update should be 14");
+
+        for (uint i = nextCursor; i < expectedAmount; i++) {
+            update = updates[i];
+            Assert.equal(update.id, i, "Id is not correct");
+            Assert.equal(
+                uint(update.impact),
+                uint(i % 5),
+                "Impact is not correct"
+            );
+            Assert.equal(
+                update.heading,
+                string(abi.encodePacked("Update ", i)),
+                "Heading is not correct"
+            );
+        }
+
+        Assert.equal(
+            nextCursor,
+            expectedCursor,
+            string(abi.encodePacked("Next cursor should be ", expectedCursor))
+        );
+
+        // Test fetching more updates than are available
+        fetchAmount = 100;
+        expectedAmount = 5;
+        expectedCursor = 20;
+        (updates, nextCursor) = status.getUpdates(nextCursor, fetchAmount);
+
+        Assert.equal(
+            updates.length,
+            expectedAmount,
+            string(abi.encodePacked("Length of updates should be ", expectedAmount))
+        );
+        Assert.equal(updates[0].id, 15, "Id of first update should be 10");
+        Assert.equal(updates[updates.length-1].id, 19, "Id of last update should be 14");
+
+        for (uint i = nextCursor; i < expectedAmount; i++) {
+            update = updates[i];
+            Assert.equal(update.id, i, "Id is not correct");
+            Assert.equal(
+                uint(update.impact),
+                uint(i % 5),
+                "Impact is not correct"
+            );
+            Assert.equal(
+                update.heading,
+                string(abi.encodePacked("Update ", i)),
+                "Heading is not correct"
+            );
+        }
+
+        Assert.equal(
+            nextCursor,
+            expectedCursor,
+            string(abi.encodePacked("Next cursor should be ", expectedCursor))
+        );
+
+        // Test fetching with too large cursor
+        fetchAmount = 10;
+        expectedAmount = 0;
+        expectedCursor = 20;
+        (updates, nextCursor) = status.getUpdates(nextCursor, fetchAmount);
+
+        Assert.equal(
+            updates.length,
+            expectedAmount,
+            string(abi.encodePacked("Length of updates should be ", expectedAmount))
+        );
+
+        Assert.equal(
+            nextCursor,
+            expectedCursor,
+            string(abi.encodePacked("Next cursor should be ", expectedCursor))
+        );
+
+        // Test fetching 0 updates
+        // Test fetching -1 updates
     }
 }
