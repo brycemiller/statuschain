@@ -53,7 +53,19 @@ contract TestStatus {
         }
 
         uint count = status.getCount();
-
         Assert.equal(count, 20, "Count after addUpdate should be 20");
+
+        Status.Update[] memory updates;
+        uint nextCursor;
+        (updates, nextCursor) = status.getUpdates(0, 10);
+
+        Status.Update memory update;
+        for (uint i = 0; i < 10; i++) {
+            update = updates[i];
+            Assert.equal(update.id, i, "Id is not correct");
+            Assert.equal(uint(update.impact), uint(i % 5), "Impact is not correct");
+            Assert.equal(update.heading, string(abi.encodePacked("Update ", i)), "Heading is not correct");
+        }
+        Assert.equal(nextCursor, 10, "Next cursor should be 10");
     }
 }
