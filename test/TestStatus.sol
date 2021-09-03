@@ -194,6 +194,21 @@ contract TestStatus {
         );
 
         // Test fetching 0 updates
-        // Test fetching -1 updates
+        fetchAmount = 0;
+        expectedAmount = 0;
+        expectedCursor = initialCursor;
+        (updates, nextCursor) = status.getUpdates(initialCursor, fetchAmount);
+
+        Assert.equal(
+            updates.length,
+            expectedAmount,
+            string(abi.encodePacked("Length of updates should be ", expectedAmount))
+        );
+
+        Assert.equal(
+            nextCursor,
+            expectedCursor,
+            string(abi.encodePacked("Next cursor should be ", expectedCursor))
+        );
     }
 }
