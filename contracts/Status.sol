@@ -2,8 +2,8 @@
 pragma solidity ^0.8.6;
 
 contract Status {
-    uint count;
-    uint maxLimit;
+    uint32 count;
+    uint8 maxLimit;
 
     enum Severity {
         CRITICAL,
@@ -14,20 +14,21 @@ contract Status {
     }
 
     struct Update {
-        uint id;
+        uint32 id;
+        uint32 timestamp;
         Severity impact;
         string heading;
         string message;
     }
 
-    mapping(uint => Update) public updates;
+    mapping(uint32 => Update) public updates;
 
     constructor() {
         count = 0;
         maxLimit = 100;
     }
 
-    function getCount() public view returns(uint) {
+    function getCount() public view returns(uint32) {
         return count;
     }
 
@@ -38,11 +39,17 @@ contract Status {
     )
         public
     {
-        updates[count] = Update(count, severity, heading, message);
+        updates[count] = Update(
+            count,
+            uint32(block.timestamp),
+            severity,
+            heading,
+            message
+        );
         count++;
     }
 
-    function getUpdate(uint id)
+    function getUpdate(uint32 id)
         public
         view
         returns (Update memory)
@@ -50,18 +57,18 @@ contract Status {
         return updates[id];
     }
 
-    function getUpdates(uint cursor, uint amount)
+    function getUpdates(uint32 cursor, uint8 amount)
         public
         view
-        returns (Update[] memory, uint nextCursor)
+        returns (Update[] memory, uint32 nextCursor)
     {
         if (amount > (count - cursor)) {
-            amount = count - cursor;
+            amount = uint8(count - cursor);
         }
 
         Update[] memory values = new Update[](amount);
 
-        for (uint i = 0; i < amount; i++) {
+        for (uint8 i = 0; i < amount; i++) {
             values[i] = updates[cursor + i];
         }
 

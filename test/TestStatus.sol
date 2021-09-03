@@ -19,7 +19,7 @@ contract TestStatus {
             "Scheduled maintenance of Amazin's platform on Sun., 29th of Aug."
         );
 
-        uint count = status.getCount();
+        uint32 count = status.getCount();
         Status.Update memory update = status.getUpdate(0);
 
         Assert.equal(count, 1, "Count after addUpdate should be 1");
@@ -46,15 +46,15 @@ contract TestStatus {
 
         Status.Update[] memory updates;
         Status.Update memory update;
-        uint initialAmount = 20;
-        uint initialCursor = 0;
-        uint count;
-        uint expectedAmount;
-        uint expectedCursor;
-        uint fetchAmount;
-        uint nextCursor;
+        uint8 initialAmount = 20;
+        uint32 initialCursor = 0;
+        uint32 count;
+        uint8 expectedAmount;
+        uint32 expectedCursor;
+        uint8 fetchAmount;
+        uint32 nextCursor;
 
-        for (uint i = 0; i < initialAmount; i++) {
+        for (uint8 i = 0; i < initialAmount; i++) {
             status.addUpdate(
                 Status.Severity(i % 5),
                 string(abi.encodePacked("Update ", i)),
@@ -84,7 +84,7 @@ contract TestStatus {
         Assert.equal(updates[0].id, 0, "Id of first update should be 0");
         Assert.equal(updates[updates.length-1].id, 9, "Id of last update should be 9");
 
-        for (uint i = 0; i < expectedAmount; i++) {
+        for (uint8 i = 0; i < expectedAmount; i++) {
             update = updates[i];
             Assert.equal(update.id, i, "Id is not correct");
             Assert.equal(
@@ -119,7 +119,7 @@ contract TestStatus {
         Assert.equal(updates[0].id, 10, "Id of first update should be 10");
         Assert.equal(updates[updates.length-1].id, 14, "Id of last update should be 14");
 
-        for (uint i = nextCursor; i < expectedAmount; i++) {
+        for (uint8 i = uint8(nextCursor); i < expectedAmount; i++) {
             update = updates[i];
             Assert.equal(update.id, i, "Id is not correct");
             Assert.equal(
@@ -154,7 +154,7 @@ contract TestStatus {
         Assert.equal(updates[0].id, 15, "Id of first update should be 10");
         Assert.equal(updates[updates.length-1].id, 19, "Id of last update should be 14");
 
-        for (uint i = nextCursor; i < expectedAmount; i++) {
+        for (uint8 i = uint8(nextCursor); i < expectedAmount; i++) {
             update = updates[i];
             Assert.equal(update.id, i, "Id is not correct");
             Assert.equal(
