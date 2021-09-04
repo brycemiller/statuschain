@@ -12,3 +12,5 @@ declare namespace AppTypes {
         drizzleState: any;
     };
 };
+
+export default AppTypes;

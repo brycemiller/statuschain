@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { AppTypes } from './types';
+import AppTypes from './types';
 
 import './App.css';
+import Header from '../Header/Header';
+import { versionMajorMinor } from 'typescript';
 
 export default class App extends Component<AppTypes.IProps, AppTypes.IState> {
   unsubscribe : any;
@@ -30,6 +32,15 @@ export default class App extends Component<AppTypes.IProps, AppTypes.IState> {
   render() {
     this.message = this.state.loading ? "Loading drizzle..." : "Drizzle loaded!";
 
-    return <div className="App">{this.message}</div>;
+    return (
+      <>
+        <Header headerText="Amazin' Status"
+          imageAltText="Amazin' Logo"
+          imageSrc="./logo192.png"
+          linkDescription="Link to Amazin's company website"
+          linkHref="#" />
+        <main className="App"><div>{this.message}</div></main>
+      </>
+    );
   }
 };
