@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
-import AppTypes from './types';
+import Header from '../Header/Header';
+import UpdateList from '../UpdateList/UpdateList';
+import AppTypes from './types.d';
 
 import './App.css';
-import Header from '../Header/Header';
-import { versionMajorMinor } from 'typescript';
 
 export default class App extends Component<AppTypes.IProps, AppTypes.IState> {
   unsubscribe : any;
-  message: string = "";
 
   constructor(props: AppTypes.IProps) {
     super(props);
-    this.state = { loading: true, drizzleState: null };
+    this.state = {
+      loading: true,
+      drizzleState: null,
+      updates: []
+    };
   }
 
   componentDidMount() {
@@ -30,7 +33,7 @@ export default class App extends Component<AppTypes.IProps, AppTypes.IState> {
   }
 
   render() {
-    this.message = this.state.loading ? "Loading drizzle..." : "Drizzle loaded!";
+    if (this.state.loading) return "Loading Drizzle...";
 
     return (
       <>
@@ -39,7 +42,7 @@ export default class App extends Component<AppTypes.IProps, AppTypes.IState> {
           imageSrc="./logo192.png"
           linkDescription="Link to Amazin's company website"
           linkHref="#" />
-        <main className="App"><div>{this.message}</div></main>
+        <UpdateList updates={this.state.updates} />
       </>
     );
   }

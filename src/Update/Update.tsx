@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UpdateTypes from './types';
+import UpdateTypes from './types.d';
 
 import './Update.css';
 

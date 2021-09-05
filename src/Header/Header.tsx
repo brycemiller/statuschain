@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import HeaderTypes from './types';
+import HeaderTypes from './types.d';
 
 import './Header.css';
 
