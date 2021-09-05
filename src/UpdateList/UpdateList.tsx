@@ -14,6 +14,13 @@ export default class UpdateList
     }
 
     render() {
+        if (!this.state.updates.length)
+            return (
+                <main className="updates-container">
+                    <div>No updates found</div>
+                </main>
+            );
+
         return (
             <main className="updates-container">
                 {this.state.updates.map(update => (
