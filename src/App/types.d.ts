@@ -4,11 +4,12 @@ import UpdateTypes from "../Update/types";
 
 declare namespace AppTypes {
     interface IProps {
-        drizzleProvider: Drizzle;
-        drizzleStore: Store;
+        drizzle: any;
+        drizzleState: any;
     }
 
     interface IState {
+        getCountDataKey: any;
         loading: boolean;
         drizzleState: any;
         updates: UpdateTypes.IUpdate[];

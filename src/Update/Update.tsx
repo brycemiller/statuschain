@@ -6,11 +6,11 @@ import './Update.css';
 export default class Update extends Component<UpdateTypes.IProps> {
     id: number = -1;
     impact: UpdateTypes.Severity = UpdateTypes.Severity.None;
-    impactString: string = "";
-    heading: string = "";
-    message: string = "";
-    timestamp: number = -1;
-    timestampString: string = "";
+    impactString: string;
+    heading: string;
+    message: string;
+    timestamp: number;
+    timestampString: string;
 
     constructor(props: UpdateTypes.IProps) {
         super(props);

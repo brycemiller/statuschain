@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Drizzle, generateStore, IDrizzleOptions } from '@drizzle/store';
+import { DrizzleContext } from '@drizzle/react-plugin';
+import { Drizzle, generateStore } from '@drizzle/store';
 import App from './App/App';
 import reportWebVitals from './reportWebVitals';
 
@@ -8,8 +9,8 @@ import Status from './contracts/Status.json';
 
 import './index.css';
 
-const drizzleOptions : IDrizzleOptions = {
-  contracts: [ Status as any] , //Work-around due to error in ABI type
+const drizzleOptions = {
+  contracts: [ Status ] , //Work-around due to error in ABI type
   web3: {
     fallback: {
       type: "ws",
@@ -22,7 +23,21 @@ const drizzleProvider = new Drizzle(drizzleOptions, drizzleStore);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App drizzleProvider={drizzleProvider} drizzleStore={drizzleStore} />
+    <DrizzleContext.Provider drizzle={drizzleProvider}>
+      <DrizzleContext.Consumer>
+        {(drizzleContext) => {
+          const {drizzle, drizzleState, initialized} = drizzleContext;
+
+          if(!initialized) {
+            return "Loading..."
+          }
+
+          return (
+            <App drizzle={drizzle} drizzleState={drizzleState} />
+          )
+        }}
+      </DrizzleContext.Consumer>
+    </DrizzleContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

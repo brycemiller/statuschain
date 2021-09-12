@@ -4,11 +4,11 @@ import HeaderTypes from './types.d';
 import './Header.css';
 
 export default class Header extends Component<HeaderTypes.IProps> {
-    headerText: string = "";
-    imageAltText: string = "";
-    imageSrc: string = "";
-    linkDescription: string = "";
-    linkHref: string = "";
+    headerText: string;
+    imageAltText: string;
+    imageSrc: string;
+    linkDescription: string;
+    linkHref: string;
 
     constructor(props: HeaderTypes.IProps) {
         super(props);

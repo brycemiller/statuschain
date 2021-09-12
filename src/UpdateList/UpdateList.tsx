@@ -17,7 +17,7 @@ export default class UpdateList
         if (!this.state.updates.length)
             return (
                 <main className="updates-container">
-                    <div>No updates found</div>
+                    <article className="updates-none">No updates found</article>
                 </main>
             );
 

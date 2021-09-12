@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Unsubscribe } from 'redux';
 import Header from '../Header/Header';
 import UpdateList from '../UpdateList/UpdateList';
 import AppTypes from './types.d';
@@ -6,35 +7,24 @@ import AppTypes from './types.d';
 import './App.css';
 
 export default class App extends Component<AppTypes.IProps, AppTypes.IState> {
-  unsubscribe : any;
+  drizzle: any;
+  drizzleState: any;
 
   constructor(props: AppTypes.IProps) {
     super(props);
+    
+    this.drizzle = props.drizzle;
+    this.drizzleState = props.drizzleState;
+
     this.state = {
+      getCountDataKey: null,
       loading: true,
       drizzleState: null,
       updates: []
     };
   }
 
-  componentDidMount() {
-    const { drizzleStore } = this.props;
-
-    this.unsubscribe = drizzleStore.subscribe(() => {
-      const drizzleState = drizzleStore.getState();
-
-      if (drizzleState.drizzleStatus.initialized)
-        this.setState({ loading: false, drizzleState });
-    });
-  };
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
   render() {
-    if (this.state.loading) return "Loading Drizzle...";
-
     return (
       <>
         <Header headerText="Amazin' Status"
